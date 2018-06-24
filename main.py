@@ -25,30 +25,35 @@ song_labels_dic = { 'blues': 0, 'classical': 1, 'country': 2,
 print('Loading data...')
 
 start = time.time()
-X, y = np.zeros((2586938,513), dtype=np.float32), np.zeros((2586938,10), dtype=np.float32)
+X, y, song_index = np.zeros((2586938,513), dtype=np.float32), np.zeros((2586938,10), dtype=np.float32), np.zeros((2586938,), dtype=np.uint16)
+
 files = glob.glob('./ckpt/*.pkl')
 files.sort()
 X_index = 0
+song_index_counter = 0
 for i in range(len(files)):
     print("Running Op on " + files[i])
     with open(files[i], 'rb') as f:
         genre = pickle.load(f)
     song_counter = 1
     for song in genre:
+        song_index_counter = song_index_counter + 1
         print(files[i] + " : " + str(song_counter))
         song_counter = song_counter+1
         song = song.T.astype(np.float32)
         for sample in song:
             X[X_index, :] = sample
             y[X_index, i] = 1
+            song_index[X_index] = song_index_counter
             X_index = X_index + 1
 
+assert song_index_counter == 1000, "ERROR: Index mismatch"
 assert X.shape[0] == y.shape[0], "ERROR: X, y dimension mismatch"
 print('Time taken: ',time.time()-start, ' seconds.')
 # Scaling
 X = X/X.max()
 
-# Splitting data
+# TODO: Splitting data
 X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.3, random_state=0)
 del X
 del y
@@ -72,7 +77,7 @@ print('[TRAINING] Time took: ', time.time()-start, ' seconds.')
 #classifier.initializer.run()
 #classifier = saver.restore(sess, './checkpoint/model.ckpt')
 
-# Test
+# TODO: Test
 Y_pred = list()
 print("[Test data...")
 for i in range(Y_test.shape[0]):
