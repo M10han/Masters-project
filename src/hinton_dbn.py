@@ -209,13 +209,13 @@ class DBN(object):
 
         (train_set_x, train_set_y) = datasets[0]
         (valid_set_x, valid_set_y) = datasets[1]
-        (test_set_x, test_set_y) = datasets[2]
+        # (test_set_x, test_set_y) = datasets[2]
 
         # compute number of minibatches for training, validation and testing
         n_valid_batches = valid_set_x.get_value(borrow=True).shape[0]
         n_valid_batches //= batch_size
-        n_test_batches = test_set_x.get_value(borrow=True).shape[0]
-        n_test_batches //= batch_size
+        # n_test_batches = test_set_x.get_value(borrow=True).shape[0]
+        # n_test_batches //= batch_size
 
         index = T.lscalar('index')  # index to a [mini]batch
 
@@ -241,18 +241,18 @@ class DBN(object):
             }
         )
 
-        test_score_i = theano.function(
-            [index],
-            self.errors,
-            givens={
-                self.x: test_set_x[
-                    index * batch_size: (index + 1) * batch_size
-                ],
-                self.y: test_set_y[
-                    index * batch_size: (index + 1) * batch_size
-                ]
-            }
-        )
+        # test_score_i = theano.function(
+        #     [index],
+        #     self.errors,
+        #     givens={
+        #         self.x: test_set_x[
+        #             index * batch_size: (index + 1) * batch_size
+        #         ],
+        #         self.y: test_set_y[
+        #             index * batch_size: (index + 1) * batch_size
+        #         ]
+        #     }
+        # )
 
         valid_score_i = theano.function(
             [index],
@@ -271,16 +271,16 @@ class DBN(object):
         def valid_score():
             return [valid_score_i(i) for i in range(n_valid_batches)]
 
-        # Create a function that scans the entire test set
-        def test_score():
-            return [test_score_i(i) for i in range(n_test_batches)]
+        # # Create a function that scans the entire test set
+        # def test_score():
+        #     return [test_score_i(i) for i in range(n_test_batches)]
 
-        return train_fn, valid_score, test_score
+        return train_fn, valid_score#, test_score
 
 
-def test_DBN(finetune_lr=0.1, pretraining_epochs=100,
-             pretrain_lr=0.01, k=1, training_epochs=1000,
-             dataset='mnist.pkl.gz', batch_size=10):
+def test_DBN(finetune_lr=0.1, pretraining_epochs=10,
+             pretrain_lr=0.001, k=1, training_epochs=474,
+             dataset='tzanetakis', batch_size=10):
     """
     Demonstrates how to train and test a Deep Belief Network.
 
@@ -302,11 +302,14 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=100,
     :param batch_size: the size of a minibatch
     """
 
-    datasets = load_data(dataset)
+    
+
+    datasets = load_data(dataset, only_train=True)
 
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
-    test_set_x, test_set_y = datasets[2]
+    # test_set_x, test_set_y = datasets[2]
+    del datasets
 
     # compute number of minibatches for training, validation and testing
     n_train_batches = train_set_x.get_value(borrow=True).shape[0] // batch_size
@@ -315,8 +318,8 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=100,
     numpy_rng = numpy.random.RandomState(123)
     print('... building the model')
     # construct the Deep Belief Network
-    dbn = DBN(numpy_rng=numpy_rng, n_ins=28 * 28,
-              hidden_layers_sizes=[1000, 1000, 1000],
+    dbn = DBN(numpy_rng=numpy_rng, n_ins=513,
+              hidden_layers_sizes=[50, 50, 50],
               n_outs=10)
 
     # start-snippet-2
@@ -346,13 +349,20 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=100,
     # end-snippet-2
     print('The pretraining code for file ' + os.path.split(__file__)[1] +
           ' ran for %.2fm' % ((end_time - start_time) / 60.), file=sys.stderr)
+
     ########################
     # FINETUNING THE MODEL #
     ########################
 
+    datasets = [(train_set_x, train_set_y), (valid_set_x, valid_set_y)]
+    del train_set_x
+    del train_set_y
+    del valid_set_x
+    del valid_set_y
+
     # get the training, validation and testing function for the model
     print('... getting the finetuning functions')
-    train_fn, validate_model, test_model = dbn.build_finetune_functions(
+    train_fn, validate_model = dbn.build_finetune_functions(
         datasets=datasets,
         batch_size=batch_size,
         learning_rate=finetune_lr
@@ -412,13 +422,13 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=100,
                     best_validation_loss = this_validation_loss
                     best_iter = iter
 
-                    # test it on the test set
-                    test_losses = test_model()
-                    test_score = numpy.mean(test_losses, dtype='float64')
-                    print(('     epoch %i, minibatch %i/%i, test error of '
-                           'best model %f %%') %
-                          (epoch, minibatch_index + 1, n_train_batches,
-                          test_score * 100.))
+                    # # test it on the test set
+                    # test_losses = test_model()
+                    # test_score = numpy.mean(test_losses, dtype='float64')
+                    # print(('     epoch %i, minibatch %i/%i, test error of '
+                    #        'best model %f %%') %
+                    #       (epoch, minibatch_index + 1, n_train_batches,
+                    #       test_score * 100.))
 
             if patience <= iter:
                 done_looping = True
@@ -427,8 +437,7 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=100,
     end_time = timeit.default_timer()
     print(('Optimization complete with best validation score of %f %%, '
            'obtained at iteration %i, '
-           'with test performance %f %%'
-           ) % (best_validation_loss * 100., best_iter + 1, test_score * 100.))
+           ) % (best_validation_loss * 100., best_iter + 1))#'with test performance %f %%'#, test_score * 100.))
     print('The fine tuning code for file ' + os.path.split(__file__)[1] +
           ' ran for %.2fm' % ((end_time - start_time) / 60.), file=sys.stderr)
 
