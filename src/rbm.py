@@ -23,7 +23,7 @@ import os
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
 from utils import tile_raster_images
-from logistic_sgd import load_data
+from dataLoader import *
 
 
 # start-snippet-1
