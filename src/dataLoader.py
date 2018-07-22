@@ -39,6 +39,38 @@ def load_data(dataset,only_train=False):
             except:
                 train_set, valid_set, test_set = pickle.load(f)
 
+    elif dataset=='tzanetakis':
+        # Do Tzanetakis instructions here
+        X, y, song_index = get_features()
+        X = (X - X.min())/(X.max()-X.min())
+        
+        data = split_data(X, y, song_index)
+        del X
+        del y
+        del song_index
+        train_idx = [i for i in range (data['X_train'].shape[0])]
+        np.random.shuffle(train_idx)
+        data['X_train'] = data['X_train'][train_idx]
+        data['y_train'] = data['y_train'][train_idx]
+
+        #testing
+        test_idx = [i for i in range (data['X_test'].shape[0])]
+        np.random.shuffle(test_idx)
+        data['X_test'] = data['X_test'][test_idx]
+        data['y_test'] = data['y_test'][test_idx]
+
+        #val
+        val_idx = [i for i in range (data['X_val'].shape[0])]
+        np.random.shuffle(val_idx)
+        data['X_val'] = data['X_val'][val_idx]
+        data['y_val'] = data['y_val'][val_idx]
+    
+
+        train_set = (data['X_train'], data['y_train'])
+        test_set = (data['X_test'],data['y_test'])
+        valid_set = (data['X_val'],data['y_val'])
+        del data
+
 
     def shared_dataset(data_xy, borrow=True):
         data_x, data_y = data_xy
