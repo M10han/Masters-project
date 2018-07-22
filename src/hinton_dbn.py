@@ -1,5 +1,3 @@
-"""
-"""
 from __future__ import print_function, division
 import os
 import sys
@@ -13,7 +11,7 @@ from theano.sandbox.rng_mrg import MRG_RandomStreams
 
 from logisticRegression import LogisticRegression
 from dataLoader import *
-from mlp import HiddenLayer
+from hiddenLayer import HiddenLayer
 from rbm import RBM
 
 
