@@ -9,7 +9,7 @@ import numpy
 import theano
 import theano.tensor as T
 
-from logisticRegression import LogisticRegression
+from .logisticRegression import LogisticRegression
 from dataLoader import *
 
 def sgd_optimization_mnist(learning_rate=0.13, n_epochs=1000,
