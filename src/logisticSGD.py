@@ -39,7 +39,7 @@ class LogisticRegression (object):
         return -T.mean(T.log(self.p_y_given_X) [T.arange(y.shape[0]), y])
 
     def errors(self, y):
-        if y.dim != self.y_pred.dim:
+        if y.ndim != self.y_pred.ndim:
             raise TypeError(
                 'y should have the same shape as self.y_pred',
                 ('y', y.type, 'y_pred', self.y_pred.type)
