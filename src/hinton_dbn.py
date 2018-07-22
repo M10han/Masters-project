@@ -11,7 +11,8 @@ import theano
 import theano.tensor as T
 from theano.sandbox.rng_mrg import MRG_RandomStreams
 
-from logistic_sgd import LogisticRegression, load_data
+from logisticRegression import LogisticRegression
+from dataLoader import *
 from mlp import HiddenLayer
 from rbm import RBM
 
