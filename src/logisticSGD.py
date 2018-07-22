@@ -25,13 +25,7 @@ class LogisticRegression (object):
         )
 
         # initialize the biases b as a vector of n_out 0s
-        self.b = theano.shared(
-            value = numpy.zeros(
-                (n_out,), dtype = theano.config.floatX),
-            name = 'b',
-            borrow = True
-            )
-        )
+        self.b = theano.shared(value = numpy.zeros((n_out,), dtype = theano.config.floatX),name = 'b', borrow = True))
 
 
         self.p_y_given_X = T.nnet.softmax(T.dot(input, self.W) + self.b)
