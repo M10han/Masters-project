@@ -9,6 +9,8 @@ import numpy
 import theano
 import theano.tensor as T
 
+from features import *
+
 def load_data(dataset,only_train=False):
     if dataset == 'mnist.pkl.gz':
         data_dir, data_file = os.path.split(dataset)
