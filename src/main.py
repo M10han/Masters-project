@@ -1,18 +1,8 @@
 from __future__ import print_function, division
-import os
 import sys
 import timeit
 
-import numpy
-
-import theano
-import theano.tensor as T
-from theano.sandbox.rng_mrg import MRG_RandomStreams
-
-from logisticRegression import LogisticRegression
 from dataLoader import *
-from hiddenLayer import HiddenLayer
-from rbm import RBM
 from dbn import DBN
 
 def test_DBN(finetune_lr=0.1, pretraining_epochs=10,

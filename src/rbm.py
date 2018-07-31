@@ -1,19 +1,15 @@
-import timeit
 
 try:
     import PIL.Image as Image
 except ImportError:
     import Image
 
-import numpy
 
 import theano
 import theano.tensor as T
-import os
 
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
-from utils import tile_raster_images
 from dataLoader import *
 
 
