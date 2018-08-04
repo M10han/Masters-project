@@ -139,10 +139,7 @@ class RBM(object):
         (
             [
                 pre_sigmoid_nvs,
-                nv_means,
                 nv_samples,
-                pre_sigmoid_nhs,
-                nh_means,
                 nh_samples
             ],
             updates
