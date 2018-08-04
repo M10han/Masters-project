@@ -30,7 +30,6 @@ def compute_features(data_loc='../data/genres/'):
     
 
     # Setup some vars
-    #sampleRate = 22050
     n_fft = 1024
 
     X = []
