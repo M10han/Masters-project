@@ -1,0 +1,8 @@
+checkpoint/
+ckpt/
+data/
+*.py.save
+.vs
+.vscode
+.idea
+.DS_Store
