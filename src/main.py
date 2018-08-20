@@ -5,7 +5,31 @@ import timeit
 from dataLoader import *
 from dbn import DBN
 
-def test_DBN(finetune_lr=0.1, pretraining_epochs=10,
+from six.moves import cPickle
+
+def test_DBN():
+    datasets = load_single_data(valid=True, test=True)
+    song_index_test = datasets[4][2]
+    datasets = [datasets[1],datasets[2],(None,None)]
+    f = open('../checkpoint/finetune.save','rb')
+    dbn = cPickle.load(f)
+    f.close()
+    batch_size = 10
+    finetune_lr = 0.1
+    train_fn, validate_model = dbn.build_finetune_functions(
+        datasets=datasets,
+        batch_size=batch_size,
+        learning_rate=finetune_lr
+    )
+    validation_losses = validate_model()
+    print(validation_losses)
+    print(song_index_test)
+    print(len(song_index_test),validation_losses.shape)
+
+
+
+
+def train_DBN(finetune_lr=0.1, pretraining_epochs=10,
              pretrain_lr=0.001, k=1, training_epochs=474,
              dataset='tzanetakis', batch_size=10):
     """
@@ -169,4 +193,5 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=10,
 
 
 if __name__ == '__main__':
+    #train_DBN()
     test_DBN()

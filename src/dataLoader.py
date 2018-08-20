@@ -96,3 +96,54 @@ def load_data(dataset,only_train=False):
     rval = [(train_set_x, train_set_y), (valid_set_x, valid_set_y),
             (test_set_x, test_set_y)]
     return rval
+
+
+# Works only on Tzanetakis
+def load_single_data(train=False, valid = False, test=False):
+
+    # Do Tzanetakis instructions here
+    X, y, song_index = get_features()
+    X = (X - X.min()) / (X.max() - X.min())
+
+    data = split_data(X, y, song_index)
+    del X
+    del y
+    del song_index
+
+    train_set = (data['X_train'], data['y_train'])
+    test_set = (data['X_test'], data['y_test'])
+    valid_set = (data['X_val'], data['y_val'])
+    song_index_set = (data['song_index_train'],data['song_index_test'],data['song_index_val'])
+    del data
+
+    def shared_dataset(data_xy, borrow=True):
+        data_x, data_y = data_xy
+        shared_x = theano.shared(numpy.asarray(data_x,
+                                               dtype=theano.config.floatX),
+                                 borrow=borrow)
+        shared_y = theano.shared(numpy.asarray(data_y,
+                                               dtype=theano.config.floatX),
+                                 borrow=borrow)
+
+        return shared_x, T.cast(shared_y, 'int32')
+
+    if train:
+        train_set_x, train_set_y = shared_dataset(train_set)
+    else:
+        train_set_x, train_set_y = None, None
+    if valid:
+        valid_set_x, valid_set_y = shared_dataset(valid_set)
+    else:
+        valid_set_x, valid_set_y = None, None
+    if test:
+        test_set_x, test_set_y = shared_dataset(test_set)
+    else:
+        test_set_x, test_set_y = None, None
+
+    del train_set
+    del valid_set
+    del test_set
+
+    rval = [(train_set_x, train_set_y), (valid_set_x, valid_set_y),
+            (test_set_x, test_set_y), song_index_set]
+    return rval
