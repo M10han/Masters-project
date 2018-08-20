@@ -101,9 +101,16 @@ def train_DBN(finetune_lr=0.1, pretraining_epochs=10,
     print('The pretraining code for file ' + os.path.split(__file__)[1] +
           ' ran for %.2fm' % ((end_time - start_time) / 60.), file=sys.stderr)
 
+    f = open('../checkpoint/pretrain.save', 'wb')
+    cPickle.dump(dbn, f, protocol=cPickle.HIGHEST_PROTOCOL)
+    f.close()
+
     ########################
     # FINETUNING THE MODEL #
     ########################
+    f = open('../checkpoint/pretrain.save','rb')
+    dbn = cPickle.load(f)
+    f.close()
 
     datasets = [(train_set_x, train_set_y), (valid_set_x, valid_set_y)]
     del train_set_x
@@ -191,7 +198,12 @@ def train_DBN(finetune_lr=0.1, pretraining_epochs=10,
     print('The fine tuning code for file ' + os.path.split(__file__)[1] +
           ' ran for %.2fm' % ((end_time - start_time) / 60.), file=sys.stderr)
 
+    f = open('../checkpoint/finetune.save', 'wb')
+    cPickle.dump(dbn, f, protocol=cPickle.HIGHEST_PROTOCOL)
+    f.close()
+    print("Models saved successfully!")
+
 
 if __name__ == '__main__':
-    #train_DBN()
-    test_DBN()
+    train_DBN()
+    #test_DBN()
