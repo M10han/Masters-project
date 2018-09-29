@@ -55,7 +55,14 @@ def tile_raster_images(X, img_shape, tile_shape, tile_spacing=(0, 0),
     assert len(tile_shape) == 2
     assert len(tile_spacing) == 2
 
-
+    # The expression below can be re-written in a more C style as
+    # follows :
+    #
+    # out_shape    = [0,0]
+    # out_shape[0] = (img_shape[0]+tile_spacing[0])*tile_shape[0] -
+    #                tile_spacing[0]
+    # out_shape[1] = (img_shape[1]+tile_spacing[1])*tile_shape[1] -
+    #                tile_spacing[1]
     out_shape = [
         (ishp + tsp) * tshp - tsp
         for ishp, tshp, tsp in zip(img_shape, tile_shape, tile_spacing)
