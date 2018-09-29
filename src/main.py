@@ -29,9 +29,9 @@ def test_DBN():
 
 
 
-def train_DBN(finetune_lr=0.001, pretraining_epochs=10,
+def train_DBN(finetune_lr=0.1, pretraining_epochs=10,
              pretrain_lr=0.001, k=1, training_epochs=474,
-             dataset='tzanetakis', batch_size=10, pretrain=False):
+             dataset='tzanetakis', batch_size=100, pretrain=False):
     """
     Demonstrates how to train and test a Deep Belief Network.
 
