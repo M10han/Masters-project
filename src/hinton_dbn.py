@@ -471,11 +471,35 @@ def test_DBN(finetune_lr=0.1, pretraining_epochs=10,
         print('Model saved successfully...')
         
 def calc_accuracies():
+
     f = open('../checkpoint/finetune.save', 'rb')
     dbn = cPickle.load(f)
     f.close()
 
     print('Model loaded successfully!')
+    print('Load datasets...')
+    datasets = load_data('tzanetakis', only_train=True)
+
+    train_set_x, train_set_y = datasets[0]
+    valid_set_x, valid_set_y = datasets[1]
+    # test_set_x, test_set_y = datasets[2]
+    song_index_val =
+    del datasets
+
+    datasets = [(train_set_x, train_set_y), (valid_set_x, valid_set_y)]
+    del train_set_x
+    del train_set_y
+    del valid_set_x
+    del valid_set_y
+
+    _, validate_model = dbn.build_finetune_functions(
+        datasets=datasets,
+        batch_size=100,
+        learning_rate=0.1
+    )
+    validation_losses = validate_model()
+
+
 
 if __name__ == '__main__':
     test_DBN()
