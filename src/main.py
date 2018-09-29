@@ -31,7 +31,7 @@ def test_DBN():
 
 def train_DBN(finetune_lr=0.1, pretraining_epochs=10,
              pretrain_lr=0.001, k=1, training_epochs=474,
-             dataset='tzanetakis', batch_size=10):
+             dataset='tzanetakis', batch_size=10, pretrain=False):
     """
     Demonstrates how to train and test a Deep Belief Network.
 
@@ -82,28 +82,29 @@ def train_DBN(finetune_lr=0.1, pretraining_epochs=10,
                                                 batch_size=batch_size,
                                                 k=k)
 
-    print('... pre-training the model')
-    start_time = timeit.default_timer()
-    # Pre-train layer-wise
-    for i in range(dbn.n_layers):
-        # go through pretraining epochs
-        for epoch in range(pretraining_epochs):
-            # go through the training set
-            c = []
-            for batch_index in range(n_train_batches):
-                c.append(pretraining_fns[i](index=batch_index,
+    if pretrain:
+        print('... pre-training the model')
+        start_time = timeit.default_timer()
+        # Pre-train layer-wise
+        for i in range(dbn.n_layers):
+            # go through pretraining epochs
+            for epoch in range(pretraining_epochs):
+                # go through the training set
+                c = []
+                for batch_index in range(n_train_batches):
+                    c.append(pretraining_fns[i](index=batch_index,
                                             lr=pretrain_lr))
-            print('Pre-training layer %i, epoch %d, cost ' % (i, epoch), end=' ')
-            print(numpy.mean(c, dtype='float64'))
+                print('Pre-training layer %i, epoch %d, cost ' % (i, epoch), end=' ')
+                print(numpy.mean(c, dtype='float64'))
 
-    end_time = timeit.default_timer()
-    # end-snippet-2
-    print('The pretraining code for file ' + os.path.split(__file__)[1] +
-          ' ran for %.2fm' % ((end_time - start_time) / 60.), file=sys.stderr)
+        end_time = timeit.default_timer()
+        # end-snippet-2
+        print('The pretraining code for file ' + os.path.split(__file__)[1] +
+            ' ran for %.2fm' % ((end_time - start_time) / 60.), file=sys.stderr)
 
-    f = open('../checkpoint/pretrain.save', 'wb')
-    cPickle.dump(dbn, f, protocol=cPickle.HIGHEST_PROTOCOL)
-    f.close()
+        f = open('../checkpoint/pretrain.save', 'wb')
+        cPickle.dump(dbn, f, protocol=cPickle.HIGHEST_PROTOCOL)
+        f.close()
 
     ########################
     # FINETUNING THE MODEL #
