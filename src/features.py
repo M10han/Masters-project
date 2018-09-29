@@ -83,7 +83,7 @@ def get_features():
     return X, y, song_index
 
 def split_data(X, y, song_index):
-    np.random.seed(1337)  # for reproducibility
+    np.random.seed(1234)  # for reproducibility
     # Training: 50%, Validation: 20%, Test: 30%
     song_indices = np.asarray([x for x in range(1,101)])
     train_indices, val_indices, test_indices = [], [], []
