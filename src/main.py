@@ -187,9 +187,9 @@ def train_DBN(finetune_lr=0.1, pretraining_epochs=10,
                     #       (epoch, minibatch_index + 1, n_train_batches,
                     #       test_score * 100.))
 
-            if patience <= iter:
-                done_looping = True
-                break
+            # if patience <= iter:
+            #     done_looping = True
+            #     break
 
     end_time = timeit.default_timer()
     print(('Optimization complete with best validation score of %f %%, '
