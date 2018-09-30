@@ -57,7 +57,7 @@ def test_DBN():
         accuracies.append((np.sum(current_song_metrics) / len(current_song_metrics)) >= 0.5)
     print("Training Accuracy = ", np.sum(accuracies) / len(accuracies))
 
-    results = model.predict(valid_set_set[0])
+    results = model.predict(valid_set[0])
     results_classes = results.argmax(axis=-1)
     results_correct = results_classes == valid_set[1]
     song_labels = np.unique(song_index_set[1])
@@ -67,7 +67,7 @@ def test_DBN():
         accuracies.append((np.sum(current_song_metrics) / len(current_song_metrics)) >= 0.5)
     print("Validation Accuracy = ", np.sum(accuracies) / len(accuracies))
 
-    results = model.predict(test_set_set[0])
+    results = model.predict(test_set[0])
     results_classes = results.argmax(axis=-1)
     results_correct = results_classes == test_set[1]
     song_labels = np.unique(song_index_set[2])
