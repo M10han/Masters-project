@@ -25,7 +25,11 @@ def test_DBN():
     validation_losses = validate_model()
     validation_losses = np.array(validation_losses)
     song_index_test = np.array(song_index_test) # Use np.unique for indices
-    song_labels, indices, count = np.unique(song_index_test, return_inverse=True, return_counts=True)
+    song_labels = np.unique(song_index_test)
+    for song_label in song_labels:
+        current_song_losses = validation_losses[song_index_test==song_label]
+        print(current_song_losses)
+
     print(song_labels, indices, count)
     print(song_index_test)
     print(song_index_test.shape,validation_losses.shape)
