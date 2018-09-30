@@ -206,5 +206,5 @@ def train_DBN(finetune_lr=0.1, pretraining_epochs=10,
 
 
 if __name__ == '__main__':
-    train_DBN()
-    #test_DBN()
+    # train_DBN()
+    test_DBN()
