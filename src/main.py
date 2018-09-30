@@ -42,62 +42,48 @@ def test_DBN():
                                                        dbn.sigmoid_layers[1].b.get_value())))
     model.add(Dense(50, activation='sigmoid', weights=(dbn.sigmoid_layers[2].W.get_value(),
                                                        dbn.sigmoid_layers[2].b.get_value())))
-    model.add(Dense(10, activation='softmax', weights=(dbn.logLayer.W.get_value(),
-                                                       dbn.logLayer.b.get_value())))
+    # model.add(Dense(10, activation='softmax', weights=(dbn.logLayer.W.get_value(),
+    #                                                    dbn.logLayer.b.get_value())))
 
     print("Model Initialized successfully!!!")
 
     results = model.predict(train_set[0], batch_size=200)
-    results_classes = results.argmax(axis=-1)
-    song_labels = np.unique(song_index_set[0])
-    accuracies = []
-    for song_label in song_labels:
-        current_song_metrics = results_classes[song_index_set[0]==song_label]
-        actual_song_metrics = train_set[1][song_index_set[0]==song_label]
-        current_song_class = np.argmax(np.bincount(current_song_metrics))
-        accuracies.append(current_song_class==actual_song_metrics[0])
-    print("Training Accuracy = ", np.sum(accuracies) / len(accuracies))
-
-    results = model.predict(valid_set[0], batch_size=200)
-    results_classes = results.argmax(axis=-1)
-    song_labels = np.unique(song_index_set[1])
-    accuracies = []
-    for song_label in song_labels:
-        current_song_metrics = results_classes[song_index_set[1] == song_label]
-        actual_song_metrics = valid_set[1][song_index_set[1] == song_label]
-        current_song_class = np.argmax(np.bincount(current_song_metrics))
-        accuracies.append(current_song_class==actual_song_metrics[0])
-    print("Validation Accuracy = ", np.sum(accuracies) / len(accuracies))
-
-    results = model.predict(test_set[0], batch_size=200)
-    results_classes = results.argmax(axis=-1)
-    song_labels = np.unique(song_index_set[2])
-    accuracies = []
-    for song_label in song_labels:
-        current_song_metrics = results_classes[song_index_set[2] == song_label]
-        actual_song_metrics = test_set[1][song_index_set[2] == song_label]
-        current_song_class = np.argmax(np.bincount(current_song_metrics))
-        accuracies.append(current_song_class==actual_song_metrics[0])
-    print("Test Accuracy = ", np.sum(accuracies) / len(accuracies))
-
-
-
-    # batch_size = 1
-    # finetune_lr = 0.1
-    # train_fn, validate_model = dbn.build_finetune_functions(
-    #     datasets=datasets,
-    #     batch_size=batch_size,
-    #     learning_rate=finetune_lr
-    # )
-    # validation_losses = validate_model()
-    # validation_losses = np.array(validation_losses)
-    # song_index_test = np.array(song_index_test) # Use np.unique for indices
-    # song_labels = np.unique(song_index_test)
+    print(results.shape)
+    # results_classes = results.argmax(axis=-1)
+    # song_labels = np.unique(song_index_set[0])
     # accuracies = []
     # for song_label in song_labels:
-    #     current_song_losses = validation_losses[song_index_test==song_label]
-    #     accuracies.append((np.sum(current_song_losses)/len(current_song_losses))>=0.5)
-    # print("Accuracy = ", np.sum(accuracies)/len(accuracies))
+    #     current_song_metrics = results_classes[song_index_set[0]==song_label]
+    #     actual_song_metrics = train_set[1][song_index_set[0]==song_label]
+    #     current_song_class = np.argmax(np.bincount(current_song_metrics))
+    #     accuracies.append(current_song_class==actual_song_metrics[0])
+    # print("Training Accuracy = ", np.sum(accuracies) / len(accuracies))
+    #
+    # results = model.predict(valid_set[0], batch_size=200)
+    # results_classes = results.argmax(axis=-1)
+    # song_labels = np.unique(song_index_set[1])
+    # accuracies = []
+    # for song_label in song_labels:
+    #     current_song_metrics = results_classes[song_index_set[1] == song_label]
+    #     actual_song_metrics = valid_set[1][song_index_set[1] == song_label]
+    #     current_song_class = np.argmax(np.bincount(current_song_metrics))
+    #     accuracies.append(current_song_class==actual_song_metrics[0])
+    # print("Validation Accuracy = ", np.sum(accuracies) / len(accuracies))
+    #
+    # results = model.predict(test_set[0], batch_size=200)
+    # results_classes = results.argmax(axis=-1)
+    # song_labels = np.unique(song_index_set[2])
+    # accuracies = []
+    # for song_label in song_labels:
+    #     current_song_metrics = results_classes[song_index_set[2] == song_label]
+    #     actual_song_metrics = test_set[1][song_index_set[2] == song_label]
+    #     current_song_class = np.argmax(np.bincount(current_song_metrics))
+    #     accuracies.append(current_song_class==actual_song_metrics[0])
+    # print("Test Accuracy = ", np.sum(accuracies) / len(accuracies))
+
+    # Training Accuracy = 0.97
+    # Validation Accuracy = 0.735
+    # Test Accuracy = 0.7466666666666667
 
 
 
