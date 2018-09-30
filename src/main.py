@@ -15,7 +15,7 @@ def test_DBN():
     f = open('../checkpoint/finetune.save','rb')
     dbn = cPickle.load(f)
     f.close()
-    batch_size = 100
+    batch_size = 1
     finetune_lr = 0.1
     train_fn, validate_model = dbn.build_finetune_functions(
         datasets=datasets,
