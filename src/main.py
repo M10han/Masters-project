@@ -48,7 +48,8 @@ def test_DBN():
     print("Model Initialized successfully!!!")
 
     results = model.predict(train_set[0])
-    print(results.shape)
+    results_classes = results.argmax(axis=-1)
+    print(results_classes.shape, song_index_set[0].shape)
 
 
 
