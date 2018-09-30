@@ -26,12 +26,11 @@ def test_DBN():
     validation_losses = np.array(validation_losses)
     song_index_test = np.array(song_index_test) # Use np.unique for indices
     song_labels = np.unique(song_index_test)
+    accuracies = []
     for song_label in song_labels:
         current_song_losses = validation_losses[song_index_test==song_label]
-        print(current_song_losses, current_song_losses.shape, np.sum(current_song_losses)/len(current_song_losses))
-
-    print(song_index_test)
-    print(song_index_test.shape,validation_losses.shape)
+        accuracies.append((np.sum(current_song_losses)/len(current_song_losses))>=0.5)
+    print("Accuracy = ", np.sum(accuracies)/len(accuracies))
 
 
 
