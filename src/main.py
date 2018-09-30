@@ -7,6 +7,11 @@ from dbn import DBN
 
 from six.moves import cPickle
 
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+
+
 def test_DBN():
     datasets = load_single_data(valid=True, test=True)
     song_index_test = datasets[3][1]
@@ -15,22 +20,38 @@ def test_DBN():
     f = open('../checkpoint/finetune.save','rb')
     dbn = cPickle.load(f)
     f.close()
-    batch_size = 1
-    finetune_lr = 0.1
-    train_fn, validate_model = dbn.build_finetune_functions(
-        datasets=datasets,
-        batch_size=batch_size,
-        learning_rate=finetune_lr
-    )
-    validation_losses = validate_model()
-    validation_losses = np.array(validation_losses)
-    song_index_test = np.array(song_index_test) # Use np.unique for indices
-    song_labels = np.unique(song_index_test)
-    accuracies = []
-    for song_label in song_labels:
-        current_song_losses = validation_losses[song_index_test==song_label]
-        accuracies.append((np.sum(current_song_losses)/len(current_song_losses))>=0.5)
-    print("Accuracy = ", np.sum(accuracies)/len(accuracies))
+    model = Sequential()
+    model.add(Dense(50, activation='sigmoid', input_shape=(513,), weights=(dbn.sigmoid_layers[0].W.get_value(),
+                                                                           dbn.sigmoid_layers[0].b.get_value())))
+    model.add(Dense(50, activation='sigmoid', weights=(dbn.sigmoid_layers[1].W.get_value(),
+                                                       dbn.sigmoid_layers[1].b.get_value())))
+    model.add(Dense(50, activation='sigmoid', weights=(dbn.sigmoid_layers[2].W.get_value(),
+                                                       dbn.sigmoid_layers[2].b.get_value())))
+    model.add(Dense(10, activation='softmax', weights=(dbn.logLayer.W.get_value(),
+                                                       dbn.logLayer.b.get_value())))
+
+    print("Model Initialized successfully!!!")
+    print(datasets[1][0].shape)
+
+
+
+
+    # batch_size = 1
+    # finetune_lr = 0.1
+    # train_fn, validate_model = dbn.build_finetune_functions(
+    #     datasets=datasets,
+    #     batch_size=batch_size,
+    #     learning_rate=finetune_lr
+    # )
+    # validation_losses = validate_model()
+    # validation_losses = np.array(validation_losses)
+    # song_index_test = np.array(song_index_test) # Use np.unique for indices
+    # song_labels = np.unique(song_index_test)
+    # accuracies = []
+    # for song_label in song_labels:
+    #     current_song_losses = validation_losses[song_index_test==song_label]
+    #     accuracies.append((np.sum(current_song_losses)/len(current_song_losses))>=0.5)
+    # print("Accuracy = ", np.sum(accuracies)/len(accuracies))
 
 
 
