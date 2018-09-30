@@ -9,8 +9,8 @@ from six.moves import cPickle
 
 def test_DBN():
     datasets = load_single_data(valid=True, test=True)
-    song_index_test = datasets[3][2]
-    datasets = [datasets[1],datasets[2],(None,None)]
+    song_index_test = datasets[3][1]
+    datasets = [datasets[2],datasets[1],(None,None)]
 
     f = open('../checkpoint/finetune.save','rb')
     dbn = cPickle.load(f)
