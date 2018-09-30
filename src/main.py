@@ -47,7 +47,8 @@ def test_DBN():
 
     print("Model Initialized successfully!!!")
 
-    print(train_set[0].shape)
+    results = model.predict(train_set[0])
+    print(results.shape)
 
 
 
