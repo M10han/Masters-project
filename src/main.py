@@ -14,7 +14,7 @@ def test_DBN():
     f = open('../checkpoint/finetune.save','rb')
     dbn = cPickle.load(f)
     f.close()
-    batch_size = 10
+    batch_size = 100
     finetune_lr = 0.1
     train_fn, validate_model = dbn.build_finetune_functions(
         datasets=datasets,
@@ -22,6 +22,8 @@ def test_DBN():
         learning_rate=finetune_lr
     )
     validation_losses = validate_model()
+    validation_losses = np.array(validation_losses)
+    song_index_test = np.array(song_index_test)
     print(validation_losses)
     print(song_index_test)
     print(len(song_index_test),validation_losses.shape)
