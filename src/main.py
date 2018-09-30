@@ -49,8 +49,13 @@ def test_DBN():
 
     results = model.predict(train_set[0])
     results_classes = results.argmax(axis=-1)
-    print(results_classes.shape, song_index_set[0].shape)
-
+    results_correct = results_classes == train_set[1]
+    song_labels = np.unique(song_index_set[0])
+    accuracies = []
+    for song_label in song_labels:
+        current_song_metrics = results_correct[song_index_set[0]==song_label]
+        accuracies.append((np.sum(current_song_metrics) / len(current_song_metrics)) >= 0.5)
+    print("Accuracy = ", np.sum(accuracies) / len(accuracies))
 
 
 
