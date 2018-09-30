@@ -11,11 +11,26 @@ import keras
 from keras.models import Sequential
 from keras.layers import Dense
 
+from features import *
+
 
 def test_DBN():
-    datasets = load_single_data(valid=True, test=True)
-    song_index_test = datasets[3][1]
-    datasets = [datasets[2],datasets[1],(None,None)]
+    # datasets = load_single_data(valid=True, test=True)
+    # song_index_test = datasets[3][2]
+    # datasets = [datasets[1],datasets[2],(None,None)]
+    X, y, song_index = get_features()
+    X = (X - X.min()) / (X.max() - X.min())
+    data = split_data(X, y, song_index)
+
+    del X
+    del y
+    del song_index
+
+    train_set = (data['X_train'], data['y_train'])
+    test_set = (data['X_test'], data['y_test'])
+    valid_set = (data['X_val'], data['y_val'])
+    song_index_set = (data['song_index_train'], data['song_index_val'], data['song_index_test'])
+    del data
 
     f = open('../checkpoint/finetune.save','rb')
     dbn = cPickle.load(f)
@@ -31,7 +46,8 @@ def test_DBN():
                                                        dbn.logLayer.b.get_value())))
 
     print("Model Initialized successfully!!!")
-    print(datasets[1][0].shape)
+
+    print(train_set[0].shape)
 
 
 
