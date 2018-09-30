@@ -124,3 +124,6 @@ def split_data(X, y, song_index):
             'song_index_train': song_index_train,
             'song_index_test': song_index_test,
             'song_index_val': song_index_val}
+
+if __name__=='__main__':
+    compute_features()
