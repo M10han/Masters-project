@@ -11,7 +11,7 @@ def test_DBN():
     datasets = load_single_data(valid=True, test=True)
     song_index_test = datasets[3][2]
     datasets = [datasets[1],datasets[2],(None,None)]
-    print(datasets[1][0].shape)
+
     f = open('../checkpoint/finetune.save','rb')
     dbn = cPickle.load(f)
     f.close()
@@ -27,7 +27,7 @@ def test_DBN():
     song_index_test = np.array(song_index_test)
     print(validation_losses)
     print(song_index_test)
-    print(datasets[2][0].shape, song_index_test.shape,validation_losses.shape)
+    print(song_index_test.shape,validation_losses.shape)
 
 
 

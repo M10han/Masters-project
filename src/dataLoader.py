@@ -113,7 +113,7 @@ def load_single_data(train=False, valid = False, test=False):
     train_set = (data['X_train'], data['y_train'])
     test_set = (data['X_test'], data['y_test'])
     valid_set = (data['X_val'], data['y_val'])
-    song_index_set = (data['song_index_train'],data['song_index_test'],data['song_index_val'])
+    song_index_set = (data['song_index_train'],data['song_index_val'],data['song_index_test'])
     del data
 
     def shared_dataset(data_xy, borrow=True):
