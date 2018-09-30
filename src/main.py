@@ -26,7 +26,7 @@ def test_DBN():
     song_index_test = np.array(song_index_test)
     print(validation_losses)
     print(song_index_test)
-    print(len(song_index_test),validation_losses.shape)
+    print(song_index_test.shape,validation_losses.shape)
 
 
 
