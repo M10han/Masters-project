@@ -54,7 +54,7 @@ def test_DBN():
     accuracies = []
     for song_label in song_labels:
         current_song_metrics = results_correct[song_index_set[0]==song_label]
-        accuracies.append((np.sum(current_song_metrics) / len(current_song_metrics)) >= 0.5)
+        accuracies.append((np.sum(current_song_metrics) / len(current_song_metrics)) > 0.1)
     print("Training Accuracy = ", np.sum(accuracies) / len(accuracies))
 
     results = model.predict(valid_set[0], batch_size=200)
@@ -64,7 +64,7 @@ def test_DBN():
     accuracies = []
     for song_label in song_labels:
         current_song_metrics = results_correct[song_index_set[1] == song_label]
-        accuracies.append((np.sum(current_song_metrics) / len(current_song_metrics)) >= 0.5)
+        accuracies.append((np.sum(current_song_metrics) / len(current_song_metrics)) > 0.1)
     print("Validation Accuracy = ", np.sum(accuracies) / len(accuracies))
 
     results = model.predict(test_set[0], batch_size=200)
@@ -74,7 +74,7 @@ def test_DBN():
     accuracies = []
     for song_label in song_labels:
         current_song_metrics = results_correct[song_index_set[2] == song_label]
-        accuracies.append((np.sum(current_song_metrics) / len(current_song_metrics)) >= 0.5)
+        accuracies.append((np.sum(current_song_metrics) / len(current_song_metrics)) > 0.1)
     print("Test Accuracy = ", np.sum(accuracies) / len(accuracies))
 
 
