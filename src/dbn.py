@@ -11,15 +11,6 @@ from hiddenLayer import HiddenLayer
 from rbm import RBM
 
 class DBN(object):
-    """Deep Belief Network
-
-    A deep belief network is obtained by stacking several RBMs on top of each
-    other. The hidden layer of the RBM at layer `i` becomes the input of the
-    RBM at layer `i+1`. The first layer RBM gets as input the input of the
-    network, and the hidden layer of the last RBM represents the output. When
-    used for classification, the DBN is treated as a MLP, by adding a logistic
-    regression layer on top.
-    """
 
     def __init__(self, numpy_rng, theano_rng=None, n_ins=784,
                  hidden_layers_sizes=[500, 500], n_outs=10):
@@ -134,20 +125,6 @@ class DBN(object):
         self.errors = self.logLayer.errors(self.y)
 
     def pretraining_functions(self, train_set_x, batch_size, k):
-        '''Generates a list of functions, for performing one step of
-        gradient descent at a given layer. The function will require
-        as input the minibatch index, and to train an RBM you just
-        need to iterate, calling the corresponding function on all
-        minibatch indexes.
-
-        :type train_set_x: theano.tensor.TensorType
-        :param train_set_x: Shared var. that contains all datapoints used
-                            for training the RBM
-        :type batch_size: int
-        :param batch_size: size of a [mini]batch
-        :param k: number of Gibbs steps to do in CD-k / PCD-k
-
-        '''
 
         # index to a [mini]batch
         index = T.lscalar('index')  # index to a minibatch
@@ -181,23 +158,6 @@ class DBN(object):
         return pretrain_fns
 
     def build_finetune_functions(self, datasets, batch_size, learning_rate):
-        '''Generates a function `train` that implements one step of
-        finetuning, a function `validate` that computes the error on a
-        batch from the validation set, and a function `test` that
-        computes the error on a batch from the testing set
-
-        :type datasets: list of pairs of theano.tensor.TensorType
-        :param datasets: It is a list that contain all the datasets;
-                        the has to contain three pairs, `train`,
-                        `valid`, `test` in this order, where each pair
-                        is formed of two Theano variables, one for the
-                        datapoints, the other for the labels
-        :type batch_size: int
-        :param batch_size: size of a minibatch
-        :type learning_rate: float
-        :param learning_rate: learning rate used during finetune stage
-
-        '''
 
         (train_set_x, train_set_y) = datasets[0]
         (valid_set_x, valid_set_y) = datasets[1]
@@ -233,19 +193,6 @@ class DBN(object):
             }
         )
 
-        # test_score_i = theano.function(
-        #     [index],
-        #     self.errors,
-        #     givens={
-        #         self.x: test_set_x[
-        #             index * batch_size: (index + 1) * batch_size
-        #         ],
-        #         self.y: test_set_y[
-        #             index * batch_size: (index + 1) * batch_size
-        #         ]
-        #     }
-        # )
-
         valid_score_i = theano.function(
             [index],
             self.errors,
@@ -263,8 +210,5 @@ class DBN(object):
         def valid_score():
             return [valid_score_i(i) for i in range(n_valid_batches)]
 
-        # # Create a function that scans the entire test set
-        # def test_score():
-        #     return [test_score_i(i) for i in range(n_test_batches)]
 
         return train_fn, valid_score#, test_score
