@@ -12,3 +12,8 @@ Feature extraction is a crucial part of many music information retrieval(MIR) ta
 - Pickle
 - LibROSA
 - Google Cloud Platform (GCP)
+
+
+- Developed a deep learning model/application for audio genre classification. Performed inference step with Keras with TensorFlow backend (GPU).
+- Entire application was run on a GCP virtual machine.
+- Model accuracy 74%, real time performance on CPU (<10ms) and GPU (<5ms).
